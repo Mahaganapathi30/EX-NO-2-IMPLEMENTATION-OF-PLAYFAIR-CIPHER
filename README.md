@@ -33,11 +33,100 @@ STEP-5: Display the obtained cipher text.
 
 
 
+## PROGRAM :
+```
+#include <stdio.h>
+#include <string.h>
 
-Program:
+char key[5][5] = {
+    {'M','O','N','A','R'},
+    {'C','H','Y','B','D'},
+    {'E','F','G','I','K'},
+    {'L','P','Q','S','T'},
+    {'U','V','W','X','Z'}
+};
 
+void findPos(char ch, int *r, int *c)
+{
+    if(ch == 'J')
+        ch = 'I';
 
+    for(int i = 0; i < 5; i++)
+    {
+        for(int j = 0; j < 5; j++)
+        {
+            if(key[i][j] == ch)
+            {
+                *r = i;
+                *c = j;
+                return;
+            }
+        }
+    }
+}
 
+int main()
+{
+    char plain[100], text[100];
+    int i, j = 0;
+    int r1, c1, r2, c2;
 
+    printf("Enter Plain Text: ");
+    scanf("%s", plain);
 
-Output:
+    for(i = 0; plain[i] != '\0'; i++)
+    {
+        text[j++] = plain[i];
+
+        if(plain[i + 1] == '\0')
+        {
+            text[j++] = 'X';
+            break;
+        }
+
+        if(plain[i] == plain[i + 1])
+        {
+            text[j++] = 'X';
+        }
+        else
+        {
+            text[j++] = plain[++i];
+        }
+    }
+
+    text[j] = '\0';
+
+    printf("Prepared Text : %s\n", text);
+    printf("Cipher Text   : ");
+
+    for(i = 0; i < j; i += 2)
+    {
+        findPos(text[i], &r1, &c1);
+        findPos(text[i + 1], &r2, &c2);
+
+        if(r1 == r2)          
+        {
+            printf("%c%c", key[r1][(c1 + 1) % 5],
+                           key[r2][(c2 + 1) % 5]);
+        }
+        else if(c1 == c2)     
+        {
+            printf("%c%c", key[(r1 + 1) % 5][c1],
+                           key[(r2 + 1) % 5][c2]);
+        }
+        else                  
+        {
+            printf("%c%c", key[r1][c2],
+                           key[r2][c1]);
+        }
+    }
+
+    return 0;
+}
+```
+## OUTPUT :
+
+<img width="1365" height="414" alt="image" src="https://github.com/user-attachments/assets/ddef83c3-380c-45c5-8358-e18db05d9b43" />
+
+## RESULT :
+
